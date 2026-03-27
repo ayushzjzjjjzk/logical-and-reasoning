@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import logo from '../assets/logo.svg'
 export default function Hero() {
     return (
@@ -7,7 +8,7 @@ export default function Hero() {
         
         <h1 className="text-4xl font-semibold">LogicStack</h1>
       </div>
-      <div className="inline-block bg-black/40 px-4 py-2 rounded-lg text-sm text-gray-300 mb-6 ml-50">
+      <div className="inline-block bg-black/40 px-4 py-2 rounded-lg text-sm text-gray-300 mb-6 ml-50   text-4xl">
         💡 Completely free to use - no ads or hidden fees
       </div>
        {/* Heading */}
@@ -27,10 +28,35 @@ export default function Hero() {
         <span className="text-gray-300 cursor-pointer">
           Select filters
         </span>
+      <Link
+  to="/quiz"
+  className="
+    relative inline-block px-6 py-3 rounded-xl font-semibold text-white
+    bg-green-500
+    overflow-hidden
+    transition-all duration-800 ease-out
 
-        <button className="bg-green-500 px-6 py-2 rounded-lg hover:bg-green-600">
-          Play
-        </button>
+    before:absolute before:inset-0 before:rounded-xl
+    before:bg-black/20 before:opacity-100
+    before:transition-opacity before:duration-500
+
+    hover:before:opacity-0
+    hover:bg-green-500
+    hover:shadow-[0_0_20px_rgba(34,255,150,0.6),0_0_60px_rgba(34,255,150,0.4)]
+  "
+>
+  {/* Glow Rays */}
+  <span className="
+    absolute inset-0 rounded-xl
+    bg-[radial-gradient(circle_at_center,rgba(34,255,150,0.4)_0%,transparent_70%)]
+    opacity-0
+    transition-opacity duration-700
+    group-hover:opacity-300
+  "></span>
+
+  {/* Text */}
+  <span className="relative z-10">Play</span>
+</Link>
       </div>
 
             
