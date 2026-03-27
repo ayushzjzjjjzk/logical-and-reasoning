@@ -19,6 +19,20 @@ export default function Hero() {
         </span>
       </h2>
 
+         <p className="mt-6 text-gray-300 leading-relaxed ml-50" >
+       Challenge yourself with over 1k+ carefully crafted questions across essential interview aptitude topics. Perfect your skills in quantitative analysis, logical deduction, verbal reasoning, and more
+      </p>  
+
+        <div className="mt-8 flex items-center gap-6 ml-50">
+        <span className="text-gray-300 cursor-pointer">
+          Select filters
+        </span>
+
+        <button className="bg-green-500 px-6 py-2 rounded-lg hover:bg-green-600">
+          Play
+        </button>
+      </div>
+
             
              
 
