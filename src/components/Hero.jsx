@@ -24,13 +24,21 @@ export default function Hero() {
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <span className="text-gray-300 cursor-default">Select filters</span>
-                <Link
-                    to="/quiz"
-                    className="group relative inline-flex items-center justify-center rounded-xl bg-green-500 px-6 py-3 font-semibold text-white overflow-hidden transition-all duration-300 ease-out hover:bg-green-400 hover:shadow-[0_0_20px_rgba(34,255,150,0.6),0_0_60px_rgba(34,255,150,0.4)]"
-                >
-                    <span className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_center,rgba(34,255,150,0.4)_0%,transparent_70%)] opacity-0 transition-opacity duration-700 group-hover:opacity-30" />
-                    <span className="relative z-10">Play</span>
-                </Link>
+                <div className="flex flex-col sm:flex-row gap-2">
+                    <Link
+                        to="/quiz"
+                        className="group relative inline-flex items-center justify-center rounded-xl bg-green-500 px-6 py-3 font-semibold text-white overflow-hidden transition-all duration-300 ease-out hover:bg-green-400 hover:shadow-[0_0_20px_rgba(34,255,150,0.6),0_0_60px_rgba(34,255,150,0.4)]"
+                    >
+                        <span className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_center,rgba(34,255,150,0.4)_0%,transparent_70%)] opacity-0 transition-opacity duration-700 group-hover:opacity-30" />
+                        <span className="relative z-10">Play</span>
+                    </Link>
+                    <Link
+                        to="/leaderboard"
+                        className="inline-flex items-center justify-center rounded-xl bg-purple-500 px-6 py-3 font-semibold text-white hover:bg-purple-400 transition-all duration-300"
+                    >
+                        🏆 Leaderboard
+                    </Link>
+                </div>
             </div>
         </div>
     )
