@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import quizData from "../data/quizData";
 import StarParticle from "./StarParticle";
 import SetResults from "./SetResults";
+import { fetchLeaderboard, saveLeaderboardEntry, supabaseEnabled } from "../lib/supabase";
 
 const QUESTIONS_PER_SET = 10;
 
@@ -55,9 +56,14 @@ export default function QuizPage() {
     }
   };
 
-  const loadQuitLeaderboard = () => {
-    const data = JSON.parse(localStorage.getItem("quizLeaderboard") || "[]");
-    setQuitLeaderboard(data.slice(0, 5));
+  const loadQuitLeaderboard = async () => {
+    try {
+      const data = await fetchLeaderboard(5);
+      setQuitLeaderboard(data);
+    } catch (err) {
+      const fallback = JSON.parse(localStorage.getItem("quizLeaderboard") || "[]");
+      setQuitLeaderboard(fallback.slice(0, 5));
+    }
   };
 
   const openQuit = () => {
@@ -66,34 +72,30 @@ export default function QuizPage() {
     loadQuitLeaderboard();
   };
 
-  const saveQuitScore = () => {
+  const saveQuitScore = async () => {
     const answeredQuestions = currentSet * QUESTIONS_PER_SET + currentQuestionInSet + (selected !== null ? 1 : 0);
     if (!quitName.trim() || answeredQuestions === 0) return;
 
     const percentage = Math.round((setScore.correct / Math.max(answeredQuestions, 1)) * 100);
-    const leaderboard = JSON.parse(localStorage.getItem("quizLeaderboard") || "[]");
-    leaderboard.push({
+    const entry = {
       name: quitName.trim(),
       score: setScore.correct,
       total: answeredQuestions,
       percentage,
-      date: new Date().toISOString(),
       sets: totalSets,
-      quit: true
-    });
+      quit: true,
+      date: new Date().toISOString(),
+    };
 
-    leaderboard.sort((a, b) => {
-      if (b.score !== a.score) return b.score - a.score;
-      return new Date(b.date) - new Date(a.date);
-    });
-
-    if (leaderboard.length > 10) {
-      leaderboard.splice(10);
+    const { error } = await saveLeaderboardEntry(entry);
+    if (error) {
+      console.error(error);
+      return;
     }
 
-    localStorage.setItem("quizLeaderboard", JSON.stringify(leaderboard));
     setQuitSaved(true);
-    setQuitLeaderboard(leaderboard.slice(0, 5));
+    const updated = await fetchLeaderboard(5).catch(() => JSON.parse(localStorage.getItem("quizLeaderboard") || "[]").slice(0, 5));
+    setQuitLeaderboard(updated);
   };
 
   const closeQuit = () => {

@@ -1,18 +1,30 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import StarParticle from "./StarParticle";
+import { fetchLeaderboard, supabaseEnabled } from "../lib/supabase";
 
 export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("quizLeaderboard") || "[]");
-    setLeaderboard(data);
+    const load = async () => {
+      try {
+        const data = await fetchLeaderboard(10);
+        setLeaderboard(data);
+      } catch (err) {
+        setError(err.message || "Unable to load leaderboard.");
+      }
+    };
+
+    load();
   }, []);
 
   const clearLeaderboard = () => {
-    localStorage.removeItem("quizLeaderboard");
-    setLeaderboard([]);
+    if (!supabaseEnabled) {
+      localStorage.removeItem("quizLeaderboard");
+      setLeaderboard([]);
+    }
   };
 
   return (
@@ -97,13 +109,16 @@ export default function Leaderboard() {
           >
             Take Quiz
           </Link>
-          {leaderboard.length > 0 && (
+          {leaderboard.length > 0 && !supabaseEnabled && (
             <button
               onClick={clearLeaderboard}
               className="flex-1 py-3 px-6 rounded-xl font-semibold text-white bg-red-500 hover:bg-red-400 transition-all duration-300 text-center max-w-xs"
             >
               Clear Scores
             </button>
+          )}
+          {error && (
+            <div className="text-center text-red-300">{error}</div>
           )}
         </div>
 

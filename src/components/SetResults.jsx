@@ -1,38 +1,40 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import StarParticle from "./StarParticle";
+import { saveLeaderboardEntry, supabaseEnabled } from "../lib/supabase";
 
 export default function SetResults({ score, total, isFinal, setNumber, totalSets, onNextSet }) {
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const percentage = Math.round((score.correct / total) * 100);
 
-  const saveToLeaderboard = () => {
+  const saveToLeaderboard = async () => {
     if (!name.trim()) return;
 
-    const leaderboard = JSON.parse(localStorage.getItem("quizLeaderboard") || "[]");
-    leaderboard.push({
+    setSaving(true);
+    setSubmitError("");
+
+    const entry = {
       name: name.trim(),
       score: score.correct,
       total,
       percentage,
+      sets: totalSets,
+      quit: false,
       date: new Date().toISOString(),
-      sets: totalSets
-    });
+    };
 
-    // Sort by score descending, then by date descending
-    leaderboard.sort((a, b) => {
-      if (b.score !== a.score) return b.score - a.score;
-      return new Date(b.date) - new Date(a.date);
-    });
+    const { error } = await saveLeaderboardEntry(entry);
+    setSaving(false);
 
-    // Keep only top 10
-    if (leaderboard.length > 10) {
-      leaderboard.splice(10);
+    if (error) {
+      setSubmitError(error.message || "Unable to save score.");
+      return;
     }
 
-    localStorage.setItem("quizLeaderboard", JSON.stringify(leaderboard));
     setSubmitted(true);
   };
 
@@ -104,13 +106,18 @@ export default function SetResults({ score, total, isFinal, setNumber, totalSets
             />
             <button
               onClick={saveToLeaderboard}
-              disabled={!name.trim()}
+              disabled={!name.trim() || saving}
               className="w-full py-3 rounded-xl font-semibold text-black bg-green-500 hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
             >
-              Save Score
+              {saving ? "Saving..." : "Save Score"}
             </button>
+            {submitError && (
+              <p className="mt-3 text-red-300">{submitError}</p>
+            )}
           </div>
-        ) : isFinal && submitted ? (
+        ) : null}
+
+        {isFinal && submitted ? (
           <div className="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10 mb-8">
             <div className="text-green-400 font-semibold">✓ Score saved to leaderboard!</div>
           </div>
