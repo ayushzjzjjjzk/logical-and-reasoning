@@ -12,13 +12,15 @@ function Home() {
       </div>
 
       {/* Layout */}
-      <div className="flex items-center justify-between min-h-screen px-16">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-10 px-6 py-10 md:flex-row md:justify-between md:px-16">
         
         {/* Left */}
-        <Hero />
+        <div className="w-full max-w-2xl">
+          <Hero />
+        </div>
 
         {/* Right */}
-        <div className="w-[450px]">
+        <div className="w-full max-w-lg">
           <QuizSlider />
         </div>
 
