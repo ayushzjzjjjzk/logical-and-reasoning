@@ -100,7 +100,7 @@ export default function Results({ score, total }) {
           </div>
         ) : (
           <div className="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10 mb-8">
-            <div className="text-green-400 font-semibold">✓ Score saved to leaderboard!</div>
+            <div className="text-green-400 font-semibold">✓ Score saved to leaderboard for {name}!</div>
           </div>
         )}
 

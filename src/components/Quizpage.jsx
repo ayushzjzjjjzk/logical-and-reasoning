@@ -327,7 +327,7 @@ export default function QuizPage() {
                   {quitSaved ? "Saved!" : "Save to Leaderboard"}
                 </button>
                 {quitSaved && (
-                  <p className="mt-3 text-green-300">Your score is now saved. You can continue or go to the leaderboard.</p>
+                  <p className="mt-3 text-green-300">Your score is now saved for {quitName}. You can continue or go to the leaderboard.</p>
                 )}
               </div>
 
